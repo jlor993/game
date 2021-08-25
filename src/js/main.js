@@ -31,6 +31,8 @@ var game = (function(){
 
     var score = 0;
 
+    var difficulty = 1;
+
 
     function launchSpawns(){
         spawner = setInterval(()=>{
@@ -51,7 +53,7 @@ var game = (function(){
                 speed:5,
             }
 
-        },400);
+        }, 400 / difficulty);
     }
 
     function moveSpawns(){
@@ -95,6 +97,12 @@ var game = (function(){
                 }else{
                     score = score + 10;
                     document.getElementById('score').innerHTML = score;
+                    if(score % 250 == 0)
+                    {
+                        difficulty++;
+                        clearInterval(spawner);
+                        launchSpawns();
+                    }
                     delete spawns[spawn];
                 }
             }
