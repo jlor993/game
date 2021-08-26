@@ -1,1 +1,1 @@
-canvas{background:#000}#score{position:absolute;top:20px;left:20px;z-index:100;font-weight:700;font-size:20px;color:#fff}
+canvas{background:#000;border-style:solid;border-color:#fff}#score{position:absolute;top:20px;left:20px;z-index:100;font-weight:700;font-size:20px;color:#fff}#meterDiv{position:absolute;top:48px;left:20px}html{background-color:#000}

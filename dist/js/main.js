@@ -31,8 +31,15 @@ var game = (function(){
 
     var score = 0;
 
+    var nextScore = 250;
+
     var difficulty = 1;
 
+    var meter = 0;
+
+    var wall = 0;
+    
+    var bomb = 0;
 
     function launchSpawns(){
         spawner = setInterval(()=>{
@@ -61,7 +68,7 @@ var game = (function(){
         if(Object.keys(spawns).length>0){
             for(let spawn in spawns){
 
-                if(spawns[spawn].y<=canvas.height){
+                if(spawns[spawn].y<=canvas.height && (meter < 100 || spawns[spawn].y <=bomb)){
 
                     ctx.fillStyle = spawns[spawn].fill;
 
@@ -97,9 +104,10 @@ var game = (function(){
                 }else{
                     score = score + 10;
                     document.getElementById('score').innerHTML = score;
-                    if(score % 250 == 0)
+                    if(score % nextScore == 0)
                     {
                         difficulty++;
+                        nextScore += 500 * difficulty;
                         clearInterval(spawner);
                         launchSpawns();
                     }
@@ -130,6 +138,12 @@ var game = (function(){
 
             if((player.x + player.w) >= canvas.width){
                 player.dir = 'left';
+                if(wall != 1)
+                {
+                    meter += 25;
+                    score += 50;
+                    wall = 1;
+                }
             }
 
         }else{
@@ -150,20 +164,54 @@ var game = (function(){
 
             if(player.x <= 0){
                 player.dir = 'right';
+                if(wall != 2)
+                {
+                    meter += 25;
+                    score += 50;
+                    wall = 2;
+                }
             }
+        }
+    }
+
+    function triggerBomb(){
+        console.log(bomb);
+        ctx.fillStyle = "#ffffff";
+        ctx.clearRect(0, bomb + 5, canvas.width, 10);
+        ctx.fillRect(0, bomb, canvas.width, 10);
+        bomb -= 5;
+        if(bomb <= 0){
+            meter = 0;
+            ctx.clearRect(0, bomb, canvas.width, 40);
         }
     }
 
     function animate(){
         movePlayer();
         moveSpawns();
+        
+        if(bomb > 0){
+            triggerBomb();
+        }
+        else if(meter >= 100){
+            bomb = canvas.height
+            score += 250;
+        }
+        
+        document.getElementById("meter").value = meter;
         if(gameOver===false){
             animation = window.requestAnimationFrame(animate.bind(animation));
+        }
+        else{
+            ctx.font = '48px arial';
+            ctx.textBaseline = 'middle';
+            ctx.textAlign = "center";
+            ctx.fillStyle = "#FFFFFF";
+            ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
         }
     }
 
     return {
-
         changeDirection: function(){
             if(player.dir === 'left'){
                 player.dir = 'right';

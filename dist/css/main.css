@@ -1,5 +1,7 @@
 canvas {
-  background: #000; }
+  background: #000;
+  border-style: solid;
+  border-color: white; }
 
 /* 4. Over lay the score on the top left corner of the canvas.*/
 #score {
@@ -10,3 +12,11 @@ canvas {
   font-weight: bold;
   font-size: 20px;
   color: #fff; }
+
+#meterDiv {
+  position: absolute;
+  top: 48px;
+  left: 20px; }
+
+html {
+  background-color: black; }
